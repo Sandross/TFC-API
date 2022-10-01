@@ -10,6 +10,9 @@ export default class LoginController {
   public login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const user = req.body as Login;
+      if (!user.password || !user.email) {
+        return { status: 400, message: 'All fields must be filled' };
+      }
       const loginData = await this.service.login(user.email, user.password);
       if (!loginData) {
         res.status(401).json({ message: 'Incorrect email or password' });
