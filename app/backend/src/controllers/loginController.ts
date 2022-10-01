@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import LoginService from '../services/loginService';
 import { Login } from '../interfaces/Login';
+import CustomError from '../utils/customError';
 
 export default class LoginController {
   constructor(
@@ -11,7 +12,7 @@ export default class LoginController {
     try {
       const user = req.body as Login;
       if (!user.password || !user.email) {
-        return { status: 400, message: 'All fields must be filled' };
+        return res.status(400).json({ message: 'All fields must be filled' });
       }
       const loginData = await this.service.login(user.email, user.password);
       if (!loginData) {
