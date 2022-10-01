@@ -1,5 +1,6 @@
 import * as express from 'express';
 import loginRouter from './routes/loginRoute';
+import ErrorMiddleware from './utils/errHandlr';
 
 class App {
   public app: express.Express;
@@ -11,6 +12,7 @@ class App {
     this.app.use(loginRouter);
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
+    this.app.use(ErrorMiddleware);
   }
 
   private config():void {
