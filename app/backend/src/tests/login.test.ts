@@ -30,10 +30,17 @@ describe('Validação da rota login', () => {
   })
 
   describe('Rota de Login', () => {
-    it('Deve fazer o login com sucesso', async () => {
-      const response =  await chai.request(app).post('/login')
-      .send({ email: 'admin@admin.com', password: 'secret_user' });
-      expect(response.status).to.equal(200);
-    });
-  })
+    it('deve retornar um token', async () => {
+      chaiHttpResponse = await chai.request(app).post('/login').send({
+          email: 'admin@admin.com',
+          password: 'secret_admin'
+          });
+  });
+});
+
+  it('Deve retornar erro de credenciais inválidas', async () => {
+    const response =  await chai.request(app).post('/login')
+    .send({ email: '', password: '' });
+    expect(response.status).to.equal(400);
+});
 });
