@@ -3,10 +3,10 @@ import Matches from '../database/models/matchesModel';
 import Team from '../database/models/teamsModel';
 
 export default class MatchService {
-  private model = Matches;
-
+  private _model = Matches;
+  private _team = Team;
   public async findAll() {
-    const matches = await this.model.findAll({
+    const matches = await this._model.findAll({
       include: [{
         model: Team,
         as: 'teamHome',
@@ -22,17 +22,17 @@ export default class MatchService {
     return matches;
   }
 
-  public async createMatch(match: any) {
+  public async createMatches(match: Matches) {
     const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = match;
     if (homeTeam === awayTeam) {
       throw new CustomError('It is not possible to create a match with two equal teams', 401);
     }
-    const homeTeamI = await Team.findOne({ where: { id: homeTeam } });
-    const awayTeamI = await Team.findOne({ where: { id: awayTeam } });
+    const homeTeamI = await this._team.findOne({ where: { id: homeTeam } });
+    const awayTeamI = await this._team.findOne({ where: { id: awayTeam } });
     if (!homeTeamI || !awayTeamI) {
       throw new CustomError('There is no team with such id!', 404);
     }
-    const newMatch = await this.model.create({
+    const newMatch = await this._model.create({
       homeTeam,
       awayTeam,
       homeTeamGoals,
@@ -42,4 +42,12 @@ export default class MatchService {
     if (!newMatch) throw new CustomError('Something went wrong', 500);
     return newMatch;
   }
+
+  public finishMatch = async (id:number) => {
+    await Matches.update({ inProgress: false }, { where: { id } });
+  };
+
+  public updateMatch = async (id:number, homeTeamGoals:number, awayTeamGoals:number) => {
+    await Matches.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+  };
 }
