@@ -22,11 +22,24 @@ export default class MatchService {
     return matches;
   }
 
-  public async findById(id: number) {
-    const match = await this.model.findOne({ where: { id } });
-    if (!match) {
-      throw new CustomError('No matches found', 404);
+  public async createMatch(match: any) {
+    const { homeTeam, awayTeam, homeTeamGoals, awayTeamGoals } = match;
+    if (homeTeam === awayTeam) {
+      throw new CustomError('It is not possible to create a match with two equal teams', 401);
     }
-    return match;
+    const homeTeamI = await Team.findOne({ where: { id: homeTeam } });
+    const awayTeamI = await Team.findOne({ where: { id: awayTeam } });
+    if (!homeTeamI || !awayTeamI) {
+      throw new CustomError('There is no team with such id!', 404);
+    }
+    const newMatch = await this.model.create({
+      homeTeam,
+      awayTeam,
+      homeTeamGoals,
+      awayTeamGoals,
+      inProgress: true,
+    });
+    if (!newMatch) throw new CustomError('Something went wrong', 500);
+    return newMatch;
   }
 }
