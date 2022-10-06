@@ -2,6 +2,7 @@ import * as express from 'express';
 import loginRouter from './routes/loginRoute';
 import teamRouter from './routes/teamRoute';
 import matchRouter from './routes/matchRoute';
+import leaderBoardRouter from './routes/leaderBoardRoute';
 import ErrorMiddleware from './utils/errHandlr';
 
 class App {
@@ -28,6 +29,7 @@ class App {
     this.app.use(teamRouter);
     this.app.use(loginRouter);
     this.app.use(matchRouter);
+    this.app.use(leaderBoardRouter);
     this.app.use(ErrorMiddleware);
   }
 
