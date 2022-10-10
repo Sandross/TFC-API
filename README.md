@@ -5,12 +5,12 @@ seu banco de dados é gerenciado pelo Sequelize, seguindo a arquitetura MSC.
 
 Algumas tecnologias utilizadas:
 
-Typescript
-NodeJS
-Programação Orientada a Objetos
-Express
-MySQL
-Sequelize
-Docker
-Mocha
-React
+- Typescript
+- NodeJS
+- Programação Orientada a Objetos
+- Express
+- MySQL
+- Sequelize
+- Docker
+- Mocha
+- React
